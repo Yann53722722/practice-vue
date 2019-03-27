@@ -1,15 +1,25 @@
 <template>
-  <div style="width: 1024px;align-self: center;">
-    <div :key="item.id" v-for="item in jobList" style="width: 1024px;align-self: center">
-      <el-card shadow="hover" style="width: 300px;float: left;margin-right: 20px">
+  <div class="job-cards">
+      <el-card shadow="hover" :key="item.id" v-for="item in jobList">
         <div slot="header" class="job-info">
           <div class="job-title">
+            <router-link :to="{ name: 'job', params: { companyId: item.company.id, jobId: item.id}}" class="title">{{ item.title }}</router-link>
+            <span class="salary">{{ item.minSalary }}-{{ item.maxSalary }}/天</span>
           </div>
-          <span>{{ item.title }}</span>
+          <div class="job-detail">
+            <span>{{ item.city }}</span>
+            <span>{{ item.workDay }}天/周</span>
+            <span>{{ item.workTime }}月</span>
+          </div>
         </div>
-        {{ item.id }}
+        <div class="company-info">
+          <router-link :to="{ name: 'company', params: { companyId: item.company.id}}">{{ item.company.name }}</router-link>
+          <div class="company-detail">
+            <span>{{ item.company.industry.name }}</span>
+            <span>|{{ item.company.scale }}</span>
+          </div>
+        </div>
       </el-card>
-    </div>
   </div>
 </template>
 
@@ -41,5 +51,17 @@ export default {
 </script>
 
 <style scoped>
-
+  .job-cards {
+    width: 1024px;
+    padding: 80px 0;
+    left: 50%;
+    margin-left: -512px;
+    position: absolute;
+  }
+  .el-card {
+    width: 300px;
+    float: left;
+    margin-top: 31px;
+    margin-left: 31px
+  }
 </style>

@@ -18,9 +18,14 @@ export default new Router({
       component: () => import('../views/login/index')
     },
     {
-      path: '/job',
+      path: '/company/:companyId/job/:jobId',
       name: 'job',
-      component: () => import('../views/home/components/JobCards')
+      component: () => import('../views/job/index')
+    },
+    {
+      path: '/company/:companyId',
+      name: 'company',
+      component: () => import('../views/company/index')
     }
   ]
 })

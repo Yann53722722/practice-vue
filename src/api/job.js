@@ -7,3 +7,9 @@ export function getList (query) {
     params: query
   })
 }
+export function getOneById (id) {
+  return request({
+    url: '/company/job/' + id,
+    method: 'get'
+  })
+}

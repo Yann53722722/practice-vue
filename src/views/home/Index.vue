@@ -1,25 +1,14 @@
 <template>
-  <div>
-    <el-container style="align-items: center">
-      <el-header style="width: 1024px">
-        <el-menu mode="horizontal" background-color="#545c64">
-          <el-menu-item style="">首页</el-menu-item>
-          <el-menu-item>个人中心</el-menu-item>
-        </el-menu>
-      </el-header>
-      <el-main>
-        <job-cards></job-cards>
-      </el-main>
-    </el-container>
-    <el-button @click="getJob">测试</el-button>
-    <div>
-      {{data}}
+  <div class="main">
+    <div class="header">
+      <stu-nav-bar></stu-nav-bar>
     </div>
-    <el-row>
-      <el-col>
-
-      </el-col>
-    </el-row>
+    <div>
+      <search-box></search-box>
+    </div>
+    <div style="margin-top: 50px">
+      <job-cards></job-cards>
+    </div>
   </div>
 </template>
 
@@ -27,10 +16,12 @@
 
 import {getList} from '../../api/job'
 import JobCards from './components/JobCards'
+import SearchBox from './components/SearchBox'
+import StuNavBar from './components/StuNavBar'
 
 export default {
   name: 'Index',
-  components: {JobCards},
+  components: {StuNavBar, SearchBox, JobCards},
   data () {
     return {
       data: null,
@@ -57,5 +48,15 @@ export default {
 </script>
 
 <style>
-
+  .main {
+    min-width: 1024px;
+    text-align: center;
+    width: 100%;
+    position: absolute;
+  }
+  .el-main {
+    width: 1024px;
+    align-self: center;
+    padding: 31px;
+  }
 </style>
