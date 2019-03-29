@@ -25,7 +25,12 @@ export default new Router({
     {
       path: '/company/:companyId',
       name: 'company',
-      component: () => import('../views/company/index')
+      component: () => import('../views/company')
+    },
+    {
+      path: '/jobs',
+      name: 'jobs',
+      component: () => import('../views/jobs')
     }
   ]
 })

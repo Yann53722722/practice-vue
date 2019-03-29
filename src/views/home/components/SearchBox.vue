@@ -17,7 +17,12 @@
 
 <script>
 export default {
-  name: 'SearchBox'
+  name: 'SearchBox',
+  data () {
+    return {
+      select: null
+    }
+  }
 }
 </script>
 
@@ -34,6 +39,7 @@ export default {
     left: 50%;
     margin-left: -481px;
     padding: 80px 0;
+    z-index: 3;
   }
   .el-input {
     position: absolute;

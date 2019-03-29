@@ -6,6 +6,9 @@
     <div>
       <search-box></search-box>
     </div>
+    <div>
+      <industry-select></industry-select>
+    </div>
     <div style="margin-top: 50px">
       <job-cards></job-cards>
     </div>
@@ -18,10 +21,11 @@ import {getList} from '../../api/job'
 import JobCards from './components/JobCards'
 import SearchBox from './components/SearchBox'
 import StuNavBar from './components/StuNavBar'
+import IndustrySelect from './components/IndustrySelect'
 
 export default {
   name: 'Index',
-  components: {StuNavBar, SearchBox, JobCards},
+  components: {IndustrySelect, StuNavBar, SearchBox, JobCards},
   data () {
     return {
       data: null,
@@ -53,10 +57,5 @@ export default {
     text-align: center;
     width: 100%;
     position: absolute;
-  }
-  .el-main {
-    width: 1024px;
-    align-self: center;
-    padding: 31px;
   }
 </style>
