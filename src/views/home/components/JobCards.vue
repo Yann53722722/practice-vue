@@ -53,7 +53,6 @@ export default {
 <style scoped>
   .job-cards {
     width: 1024px;
-    padding: 360px 0;
     left: 50%;
     margin-left: -512px;
     position: absolute;

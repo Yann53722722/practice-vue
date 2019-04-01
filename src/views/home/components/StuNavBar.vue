@@ -17,9 +17,12 @@
       <router-link style="height: 50px;margin-top: 150px" :to="{ name: 'index'}">
         <el-button type="primary" style="width: 100px">企业入口</el-button>
       </router-link>
-      <router-link style="height: 50px;margin-top: 150px;margin-left: 6px" :to="{ name: 'index'}">
+      <router-link style="height: 50px;margin-top: 150px;margin-left: 6px" :to="{ name: 'login'}">
         <el-button type="primary" style="width: 100px">学生入口</el-button>
       </router-link>
+    </div>
+    <div class="user" v-else>
+      {{ userId }}
     </div>
   </div>
 </template>

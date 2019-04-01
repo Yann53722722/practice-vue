@@ -3,13 +3,13 @@
     <div class="header">
       <stu-nav-bar></stu-nav-bar>
     </div>
-    <div>
+    <div class="search-box">
       <search-box></search-box>
     </div>
-    <div>
+    <div class="industry-select">
       <industry-select></industry-select>
     </div>
-    <div style="margin-top: 50px">
+    <div style="margin-top: 20px">
       <job-cards></job-cards>
     </div>
   </div>
@@ -57,5 +57,23 @@ export default {
     text-align: center;
     width: 100%;
     position: absolute;
+  }
+  .search-box {
+    margin-top: 10px;
+    height: 40px;
+  }
+  .header {
+    height: 50px;
+  }
+  .industry-select {
+    height: 242px;
+    margin-top: 20px;
+  }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
   }
 </style>

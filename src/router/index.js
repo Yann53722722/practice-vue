@@ -31,6 +31,11 @@ export default new Router({
       path: '/jobs',
       name: 'jobs',
       component: () => import('../views/jobs')
+    },
+    {
+      path: '/stu/:userId',
+      name: 'stu',
+      component: () => import(('../views/resume'))
     }
   ]
 })

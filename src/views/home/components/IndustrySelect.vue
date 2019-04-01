@@ -97,7 +97,6 @@ export default {
 .industry-select {
   border: gray 1px;
   width: 968px;
-  padding-top: 150px;
   left: 50%;
   margin-left: -481px;
   position: absolute;

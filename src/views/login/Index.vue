@@ -33,9 +33,10 @@ export default {
       login(this.loginData.username, this.loginData.password).then(res => {
         this.data = res
         this.$store.dispatch('HandleLogin', this.data).then(() => {
-          console.log(this.$store.getters.token)
+          this.$router.push({
+            name: 'index'
+          })
         })
-        console.log(this.data)
       })
     }
   }

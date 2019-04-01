@@ -1,15 +1,17 @@
-<template xmlns:el-col="http://www.w3.org/1999/html">
+<template>
   <div class="job-filter-box">
+    <div class="search-box">
+      <search-box
+        :job-query="jobQuery"
+        v-on:searchBoxData="searchBoxData"
+      ></search-box>
+    </div>
     <el-collapse class="collapse">
       <el-collapse-item>
         <template slot="title">
           <div style="width: 968px">
             <div style="float: left">
               <span>筛选：</span>
-              <!--<div>-->
-                <!--<span>最低学历</span>-->
-                <!--<el-tag>dd</el-tag>-->
-              <!--</div>-->
               <span>
                 最低学历
                 <el-tag
@@ -57,6 +59,7 @@
               >{{ rank.label }}</el-radio-button>
             </el-radio-group>
           </div>
+          <hr class="style-one"/>
           <div>
             <span>薪资范围：</span>
             <el-radio-group v-model="salary">
@@ -69,6 +72,7 @@
               >{{ rank.label }}</el-radio-button>
             </el-radio-group>
           </div>
+          <hr class="style-one"/>
           <div>
             <span>实习天数：</span>
             <el-radio-group v-model="jobQuery.workDay">
@@ -81,6 +85,7 @@
               >{{ rank.label }}</el-radio-button>
             </el-radio-group>
           </div>
+          <hr class="style-one"/>
           <div>
             <span>实习月份：</span>
             <el-radio-group v-model="jobQuery.workTime">
@@ -96,14 +101,29 @@
         </div>
       </el-collapse-item>
     </el-collapse>
+    <div :style="{ height: height + 'px', marginTop: '20px' }">
+      <job-list :job-list="jobList"></job-list>
+    </div>
+    <div style="margin-top: 20px">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        @current-change="currentChange"
+        :page-size="10"
+        :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
 import IndustrySelect from '../../home/components/IndustrySelect'
+import JobList from './JobList'
+import {getList} from '../../../api/job'
+import SearchBox from '../../home/components/SearchBox'
 export default {
   name: 'JobFilterBox',
-  components: {IndustrySelect},
+  components: {SearchBox, JobList, IndustrySelect},
   data () {
     return {
       selectTags: {
@@ -237,6 +257,10 @@ export default {
       ],
       workTimeOptions: [
         {
+          value: null,
+          label: '不限'
+        },
+        {
           value: '1',
           label: '一个月'
         },
@@ -271,31 +295,67 @@ export default {
         {
           value: '9',
           label: '九个月'
-        },
-        {
-          value: '10',
-          label: '十个月'
         }
-      ]
+      ],
+      jobList: null,
+      height: null,
+      tableStyle: {
+        height: this.height + 'px',
+        width: '24px'
+      },
+      total: null
     }
   },
   methods: {
     changeTags (value) {
       this.selectTags.educationRankTag = value
+      this.jobQuery.page = 1
+      this.getJobList()
     },
     changeSalary (value) {
       this.jobQuery.minSalary = this.salary.minValue
       this.jobQuery.maxSalary = this.salary.maxValue
       this.selectTags.salaryTag = value
+      this.jobQuery.page = 1
+      this.getJobList()
     },
     changeWorkDay (value) {
       this.selectTags.workDay = value
+      this.jobQuery.page = 1
+      this.getJobList()
     },
     changeWorkTime (value) {
       this.selectTags.workTime = value
+      this.jobQuery.page = 1
+      this.getJobList()
+    },
+    getJobList () {
+      getList(this.jobQuery).then(res => {
+        this.jobList = res.data.content
+        this.height = res.data.content.length * 100
+        this.total = res.data.totalElements
+      })
+    },
+    currentChange (val) {
+      this.jobQuery.page = val
+      this.getJobList()
+    },
+    searchBoxData (res) {
+      console.log(res)
+      this.jobList = res.data.content
+      this.height = res.data.content.length * 100
+      this.total = res.data.totalElements
     }
   },
   created () {
+    if (this.$route.params.title !== undefined) {
+      this.jobQuery.title = this.$route.params.title
+    }
+    if (this.$route.params.city !== undefined) {
+      this.jobQuery.city = this.$route.params.city
+    }
+    console.log(this.$route.params.title)
+    this.getJobList()
   }
 }
 </script>
@@ -309,6 +369,7 @@ export default {
   }
   .collapse {
     width: 968px;
+    margin-top: 10px;
   }
   .condition {
     width: 968px;
@@ -316,5 +377,24 @@ export default {
     line-height: 50px;
   }
   .select-radio {
+  }
+  .style-one {
+
+    border: 0;
+
+    height: 0;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .el-collapse-item__arrow {
+    display: none;
+  }
+  i {
+    display: none;
+  }
+  .search-box {
+    height: 40px;
   }
 </style>

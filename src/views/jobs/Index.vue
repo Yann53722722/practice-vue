@@ -1,11 +1,10 @@
 <template>
  <div class="jobs">
-   <div class="header">
+   <div class="stu-nav-bar">
      <stu-nav-bar></stu-nav-bar>
-     <search-box></search-box>
-     <div class="filter-box">
-       <job-filter-box></job-filter-box>
-     </div>
+   </div>
+   <div class="filter-box">
+     <job-filter-box></job-filter-box>
    </div>
  </div>
 </template>
@@ -14,9 +13,10 @@
 import StuNavBar from '../home/components/StuNavBar'
 import SearchBox from '../home/components/SearchBox'
 import JobFilterBox from './components/JobFilterBox'
+import JobList from './components/JobList'
 export default {
   name: 'Index',
-  components: {JobFilterBox, SearchBox, StuNavBar}
+  components: {JobList, JobFilterBox, SearchBox, StuNavBar}
 }
 </script>
 
@@ -28,6 +28,10 @@ export default {
     position: absolute;
   }
   .filter-box {
-    padding-top: 150px;
+    margin-top: 20px;
+    height: 50px;
+  }
+  .stu-nav-bar {
+    height: 50px;
   }
 </style>
