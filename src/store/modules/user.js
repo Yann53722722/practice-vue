@@ -1,10 +1,10 @@
-import {getToken, setToken} from '../../utils/token'
+import {getlocalStorage, getToken, setlocalStorage, setToken} from '../../utils/token'
 
 const user = {
   state: {
     token: getToken(),
-    username: '',
-    userId: ''
+    username: getlocalStorage('username'),
+    userId: getlocalStorage('userId')
   },
   mutations: {
     SET_TOKEN: (state, token) => {
@@ -24,6 +24,8 @@ const user = {
         commit('SET_NAME', data.data.user.username)
         commit('SET_ID', data.data.user.id)
         setToken(data.data.jwt.access_token)
+        setlocalStorage('username', data.data.user.username)
+        setlocalStorage('userId', data.data.user.id)
         resolve()
       })
     }

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '../views/home/Index'
-
 Vue.use(Router)
 
 export default new Router({
@@ -35,7 +34,7 @@ export default new Router({
     {
       path: '/stu/:userId',
       name: 'stu',
-      component: () => import(('../views/resume'))
+      component: () => import(('../views/resume/Index'))
     }
   ]
 })

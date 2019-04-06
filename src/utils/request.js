@@ -14,7 +14,6 @@ service.interceptors.request.use(
   config => {
     // Do something before request is sent
     if (config.url === '/user/user/login') {
-      console.log(config)
       return config
     }
     if (store.getters.token) {
