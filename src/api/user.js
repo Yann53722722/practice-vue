@@ -21,3 +21,15 @@ export function getUserInfoByName (username) {
     params: {username}
   })
 }
+export function addUser (username, password, userType) {
+  const data = {
+    username,
+    password
+  }
+  return request({
+    url: '/user/user/',
+    method: 'post',
+    params: {userType},
+    data: data
+  })
+}

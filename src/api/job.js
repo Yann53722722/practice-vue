@@ -13,3 +13,35 @@ export function getOneById (id) {
     method: 'get'
   })
 }
+export function addJob (job) {
+  return request({
+    url: '/company/job/',
+    method: 'post',
+    data: job
+  })
+}
+export function deleteJob (id) {
+  return request({
+    url: '/company/job/' + id,
+    method: 'delete'
+  })
+}
+export function editJob (job) {
+  return request({
+    url: '/company/job/',
+    method: 'put',
+    data: job
+  })
+}
+export function getUncheckList () {
+  return request({
+    url: '/company/job/getUncheckJobList',
+    method: 'get'
+  })
+}
+export function checkJob (id) {
+  return request({
+    url: '/company/job/' + id,
+    method: 'patch'
+  })
+}

@@ -1,10 +1,12 @@
-import {getlocalStorage, getToken, setlocalStorage, setToken} from '../../utils/token'
+import {getToken, removelocalStorage, removeToken, setlocalStorage, setToken} from '../../utils/token'
+import {getUserInfoByName, getUserInfoByToken} from '../../api/user'
 
 const user = {
   state: {
     token: getToken(),
-    username: getlocalStorage('username'),
-    userId: getlocalStorage('userId')
+    username: '',
+    userId: '',
+    roles: []
   },
   mutations: {
     SET_TOKEN: (state, token) => {
@@ -15,6 +17,9 @@ const user = {
     },
     SET_ID: (state, userId) => {
       state.userId = userId
+    },
+    SET_ROLES: (state, roles) => {
+      state.roles = roles
     }
   },
   actions: {
@@ -26,6 +31,27 @@ const user = {
         setToken(data.data.jwt.access_token)
         setlocalStorage('username', data.data.user.username)
         setlocalStorage('userId', data.data.user.id)
+        resolve()
+      })
+    },
+    getUserInfo ({ commit }) {
+      return new Promise((resolve, reject) => {
+        getUserInfoByToken().then(response => {
+          getUserInfoByName(response.name).then(res => {
+            commit('SET_NAME', res.data.username)
+            commit('SET_ID', res.data.id)
+            resolve(res)
+          })
+        })
+      })
+    },
+    handleLogout ({ commit }) {
+      return new Promise((resolve) => {
+        removeToken()
+        removelocalStorage('username')
+        removelocalStorage('userId')
+        commit('SET_NAME', '')
+        commit('SET_ID', '')
         resolve()
       })
     }

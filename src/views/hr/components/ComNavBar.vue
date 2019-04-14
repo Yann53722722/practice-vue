@@ -1,24 +1,29 @@
 <template>
-  <div class="stu-nav-bar">
+  <div class="com-nav-bar">
     <div class="menu">
       <img style="height: 50px" src="../../../assets/logo.png">
     </div>
     <div class="menu menu-item">
-      <router-link style="height: 50px;margin-top: 150px" :to="{ name: 'index'}">
-        <span style="font-size: 40px">首页</span>
+      <router-link style="height: 50px;margin-top: 150px" :to="{ name: 'hr'}">
+        <span style="font-size: 30px">公司管理</span>
       </router-link>
     </div>
     <div class="menu menu-item">
-      <router-link style="height: 50px;margin-top: 150px" :to="{ name: 'stu', params: { userId: userId }}">
-        <span style="font-size: 40px">个人中心</span>
+      <router-link style="height: 50px;margin-top: 150px" :to="{ name: 'resumes', params: { userId: userId }}">
+        <span style="font-size: 30px">简历管理</span>
+      </router-link>
+    </div>
+    <div class="menu menu-item">
+      <router-link style="height: 50px;margin-top: 150px" :to="{ name: 'addJob', params: { userId: userId }}">
+        <span style="font-size: 30px">岗位管理</span>
       </router-link>
     </div>
     <div class="menu switch" v-if="userId === ''">
       <router-link style="height: 50px;margin-top: 150px" :to="{ name: 'login', query: {role: 'com'}}">
-        <el-button type="primary" style="width: 100px">企业入口</el-button>
+        <el-button type="primary" size="mini">登陆</el-button>
       </router-link>
       <router-link style="height: 50px;margin-top: 150px;margin-left: 6px" :to="{ name: 'login', query: {role: 'stu'}}">
-        <el-button type="primary" style="width: 100px">学生入口</el-button>
+        <el-button type="primary" size="mini">学生入口</el-button>
       </router-link>
     </div>
     <div class="user" v-else>
@@ -30,7 +35,7 @@
 
 <script>
 export default {
-  name: 'StuNavBar',
+  name: 'ComNavBar',
   data () {
     return {
       userId: this.$store.getters.userId,
@@ -55,13 +60,12 @@ export default {
 </script>
 
 <style scoped>
-  .stu-nav-bar {
+  .com-nav-bar {
     height: 50px;
     position: absolute;
     width: 1024px;
     left: 50%;
     margin-left: -480px;
-    z-index: 4;
   }
   a {
     text-decoration: none;
@@ -74,7 +78,7 @@ export default {
     margin-left: 10px;
   }
   .switch {
-    margin-left: 320px;
+    margin-left: 220px;
     padding-top: 12px;
   }
 </style>
