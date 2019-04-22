@@ -17,7 +17,12 @@
             <div class="job-msg">
               <span class="split">{{ job.minSalary }}-{{ job.maxSalary }}/天</span>
               <span class="split">{{ job.city }}</span>
-              <span class="split">{{ job.educationRank }}</span>
+              <span class="split" v-if="job.educationRank === 'UNDERGRADUATE'">本科</span>
+              <span class="split" v-else-if="job.educationRank === 'HIGH_SCHOOL'">高中</span>
+              <span class="split" v-else-if="job.educationRank === 'TECHNICAL_SECONDARY_SCHOOL'">中专</span>
+              <span class="split" v-else-if="job.educationRank === 'JUNIOR_COLLEGE'">大专</span>
+              <span class="split" v-else-if="job.educationRank === 'MASTER'">硕士</span>
+              <span class="split" v-else-if="job.educationRank === 'DOCTOR'">博士</span>
               <span class="split">{{ job.workDay }}/周</span>
               <span>实习{{ job.workTime }}个月</span>
             </div>

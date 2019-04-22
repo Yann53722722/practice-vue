@@ -22,8 +22,8 @@
       </router-link>
     </div>
     <div class="user" v-else>
-      {{ username }}
-      <el-button @click="logout" size="mini">退出登陆</el-button>
+      {{ username }}用户已登陆
+      <el-button type="danger" style="margin-left: 3px" @click="logout" size="mini">退出登陆</el-button>
     </div>
   </div>
 </template>
@@ -58,7 +58,7 @@ export default {
   .stu-nav-bar {
     height: 50px;
     position: absolute;
-    width: 1024px;
+    width: 968px;
     left: 50%;
     margin-left: -480px;
     z-index: 4;
@@ -76,5 +76,9 @@ export default {
   .switch {
     margin-left: 320px;
     padding-top: 12px;
+  }
+  .user {
+    float: right;
+    margin-top: 15px;
   }
 </style>

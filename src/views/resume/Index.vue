@@ -10,17 +10,23 @@
             <span style="font-size: 30px">个人信息</span>
             <el-button style="float: right; padding: 3px 0" type="text" @click="personInfoEdit = true">编辑</el-button>
           </div>
-          <div v-if="personInfoEdit === false">
-            <div>
+          <div style="text-align: left;margin-left: 30px" v-if="personInfoEdit === false">
+            <div style="font-size: 50px">
               {{ personInfo.name }}
             </div>
-            <div>
+            <div style="margin-top: 20px">
               <span v-if="personInfo.gender === 'MALE'">男</span>
-              <span v-else>女</span>
-              | {{ personInfo.age }} | {{ personInfo.city }}
+              <span v-else-if="personInfo.gender === 'FEMALE'">女</span>
+              <span v-else></span>
+              <span style="margin: 0 20px;color: #B3C0D1">|</span>
+              {{ personInfo.age }}
+              <span style="margin: 0 20px;color: #B3C0D1">|</span>
+              {{ personInfo.city }}
             </div>
-            <div>
-              {{ personInfo.mobile }} | {{ personInfo.email }}
+            <div style="margin-top: 20px">
+              {{ personInfo.mobile }}
+              <span style="margin: 0 20px;color: #B3C0D1">|</span>
+              {{ personInfo.email }}
             </div>
           </div>
           <div v-else>
@@ -39,10 +45,21 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="所在城市">
-                  <el-select v-model="personInfo.city">
-                    <el-option label="成都" value="成都"></el-option>
-                    <el-option label="北京" value="北京"></el-option>
-                    <el-option label="上海" value="上海"></el-option>
+                  <el-select style="width: 100px" v-model="province" @change="citySelect" placeholder="请选择">
+                    <el-option
+                      v-for="item in provinceOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                  <el-select style="width: 100px" v-model="personInfo.city" placeholder="请选择">
+                    <el-option
+                      v-for="item in cityOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="邮箱">
@@ -61,7 +78,7 @@
         </el-card>
       </div>
       <div class="resume">
-        <el-card style="height: 300px">
+        <el-card>
           <div slot="header">
             <span style="font-size: 30px">简历中心</span>
             <el-button style="float: right; padding: 3px 0" type="text" @click="handleResumeTypeDialogOpen">新增</el-button>
@@ -77,7 +94,7 @@
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="primary" @click="handleEditDialogOpen(scope.row.id, scope.row.resumeType)">编辑</el-button>
+                  <el-button size="mini" type="primary" @click="handleEditDialogOpen(scope.row.id, scope.$index, scope.row.resumeType)">编辑</el-button>
                   <el-button size="mini" type="danger" @click="handleDeleteResume(scope.row.id, scope.$index)">删除</el-button>
                 </template>
               </el-table-column>
@@ -170,11 +187,11 @@
               {{ item.profession }}
               <span class="line">|</span>
               <span v-if="item.educationRank === 'UNDERGRADUATE'">本科</span>
-              <span v-else-if="item.education === 'HIGH_SCHOOL'">高中</span>
-              <span v-else-if="item.education === 'TECHNICAL_SECONDARY_SCHOOL'">中专</span>
-              <span v-else-if="item.education === 'JUNIOR_COLLEGE'">大专</span>
-              <span v-else-if="item.education === 'MASTER'">硕士</span>
-              <span v-else-if="item.education === 'DOCTOR'">博士</span>
+              <span v-else-if="item.educationRank === 'HIGH_SCHOOL'">高中</span>
+              <span v-else-if="item.educationRank === 'TECHNICAL_SECONDARY_SCHOOL'">中专</span>
+              <span v-else-if="item.educationRank === 'JUNIOR_COLLEGE'">大专</span>
+              <span v-else-if="item.educationRank === 'MASTER'">硕士</span>
+              <span v-else-if="item.educationRank === 'DOCTOR'">博士</span>
               <div style="float: right" >
                 <el-button type="text" @click="editEducationDialogOpen(item, index)">编辑</el-button>
                 <el-button size="mini" type="danger" @click="deleteEducation(item.id, index)">删除</el-button>
@@ -609,11 +626,15 @@ import {
   updatePersonInfo
 } from '../../api/resume'
 import {jsGetAge} from '../../utils/age'
+import cities from '../../utils/cities'
 export default {
   name: 'Index',
   components: {StuNavBar},
   data () {
     return {
+      province: null,
+      provinceOptions: null,
+      cityOptions: null,
       index: 0,
       editOrAdd: 'edit', // true表示处于编辑状态，false表示处于添加状态
       educationEditDialogVisible: false, // 教育背景编辑对话框状态
@@ -723,10 +744,12 @@ export default {
         }
       ],
       gradeRankOptions: ['前10%', '前30%', '中等', '中下'],
-      chooseVisible: false
+      chooseVisible: false,
+      resumeIndex: null
     }
   },
   created () {
+    this.provinceOptions = cities
     this.getUser()
   },
   methods: {
@@ -746,6 +769,7 @@ export default {
       updatePersonInfo(this.personInfo).then(res => {
         this.personInfo = res.data
         this.personInfoEdit = false
+        this.personInfo.age = jsGetAge(this.personInfo.birthday)
       })
     },
     resetResumeVO () {
@@ -827,7 +851,15 @@ export default {
         resumeName: null
       }
     },
-    handleEditDialogOpen (resumeId, resumeType) {
+    citySelect (value) {
+      for (let i = 0; i < this.provinceOptions.length; i++) {
+        if (this.provinceOptions[i].value === value) {
+          this.cityOptions = this.provinceOptions[i].children
+        }
+      }
+    },
+    handleEditDialogOpen (resumeId, index, resumeType) {
+      this.resumeIndex = index
       if (resumeType === 'FILE') {
       } else {
         this.editDialogVisible = true
@@ -1060,6 +1092,7 @@ export default {
       editResume(this.resume).then(res => {
         this.resumeVO.resume = res.data
         this.resumeEditDialogVisible = false
+        this.resumes.splice(this.resumeIndex, 1, res.data)
       })
     },
     handleResumeTypeDialogOpen () {
@@ -1076,7 +1109,7 @@ export default {
       this.resume.resumeType = 'TEMPLATE'
       addResume(this.resume).then(res => {
         this.resumes.push(res.data)
-        this.handleEditDialogOpen(res.data.id, res.data.resumeType)
+        this.handleEditDialogOpen(res.data.id, this.resumes.length, res.data.resumeType)
       })
     },
     handleDeleteResume (resumeId, index) {
@@ -1090,7 +1123,7 @@ export default {
 
 <style scoped>
   .person-center {
-    min-width: 1024px;
+    width: 968px;
     width: 100%;
     text-align: center;
     position: absolute;
@@ -1103,14 +1136,14 @@ export default {
     height: 1000px;
   }
   .person-info {
-    width: 1024px;
+    width: 968px;
     left: 50%;
     margin-left: -480px;
     position: absolute;
   }
   .resume {
     margin-top: 380px;
-    width: 1024px;
+    width: 968px;
     left: 50%;
     margin-left: -480px;
     position: absolute;

@@ -4,6 +4,8 @@ import Index from '../views/home/Index'
 import CheckCompany from '../views/admin/components/CheckCompany'
 import CheckJob from '../views/admin/components/CheckJob'
 import UserList from '../views/admin/components/UserList'
+import CompanyList from '../views/admin/components/CompanyList'
+import JobManageList from '../views/admin/components/JobManageList'
 Vue.use(Router)
 
 const router = new Router({
@@ -73,6 +75,16 @@ const router = new Router({
           path: 'user-list',
           name: 'user-list',
           component: UserList
+        },
+        {
+          path: 'company-list',
+          name: 'company-list',
+          component: CompanyList
+        },
+        {
+          path: 'job-list',
+          name: 'job-list',
+          component: JobManageList
         }
       ]
     },

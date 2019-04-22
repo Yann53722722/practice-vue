@@ -3,9 +3,9 @@
     <div class="header">
       <com-nav-bar></com-nav-bar>
     </div>
-    <div class="job-list">
+    <div v-if="company.checked === 'CHECKED'" class="job-list">
       <div>
-        <el-button style="width: 100%;margin: 10px 0" type="primary" @click="addJobDialogOpen">发布岗位</el-button>
+        <el-button style="width: 968px;margin: 10px 0" type="primary" @click="addJobDialogOpen">发布岗位</el-button>
       </div>
       <div>
         <el-table
@@ -39,7 +39,7 @@
           </el-table-column>
           <el-table-column width="200px">
             <template slot-scope="scope">
-              <div>
+              <div style="float: right">
                 <el-button type="primary" size="mini" @click="editJobDialogOpen(scope.$index)">编辑</el-button>
                 <el-button type="danger" size="mini" @click="deleteJob(scope.row.id,scope.$index)">删除</el-button>
               </div>
@@ -48,6 +48,9 @@
         </el-table>
       </div>
     </div>
+    <div v-else style="margin-top: 20px">
+      <span style="font-size: 30px">您的公司信息正在审核，请等待审核通过后进行岗位发布！</span>
+    </div>
     <el-dialog
       :visible="addJobDialogVisible"
       :before-close="handleClose"
@@ -55,7 +58,7 @@
       >
       <el-form
         :model="job"
-        label-width="80px"
+        label-width="120px"
         label-position="right"
       >
         <el-form-item label="岗位名称">
@@ -65,10 +68,10 @@
           <el-input v-model="job.minSalary"/>~<el-input v-model="job.maxSalary"/>/天
         </el-form-item>
         <el-form-item label="每周工作天数">
-          <el-input v-model="job.workDay"/>
+          <el-input v-model="job.workDay"/>天
         </el-form-item>
         <el-form-item label="实习时长">
-          <el-input v-model="job.workTime"/>
+          <el-input v-model="job.workTime"/>个月
         </el-form-item>
         <el-form-item label="学历要求">
           <el-select v-model="job.educationRank">
@@ -89,7 +92,22 @@
           </el-select>
         </el-form-item>
         <el-form-item label="所在城市">
-          <el-input v-model="job.city"/>
+          <el-select v-model="province" @change="citySelect" placeholder="请选择">
+            <el-option
+              v-for="item in provinceOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select v-model="job.city" placeholder="请选择">
+            <el-option
+              v-for="item in cityOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="详细地址">
           <el-input v-model="job.address"/>
@@ -111,11 +129,15 @@ import ComNavBar from './components/ComNavBar'
 import {getByUserId} from '../../api/company'
 import {getAllType} from '../../api/jobType'
 import {addJob, deleteJob, editJob} from '../../api/job'
+import cities from '../../utils/cities'
 export default {
   name: 'AddJob',
   components: {ComNavBar},
   data () {
     return {
+      province: null,
+      provinceOptions: null,
+      cityOptions: null,
       jobTypes: [],
       educationRanks: [
         {
@@ -155,7 +177,8 @@ export default {
         scale: null,
         industryId: null,
         image: null,
-        city: null
+        city: null,
+        checked: null
       },
       jobs: [],
       industry: {
@@ -182,10 +205,18 @@ export default {
     }
   },
   created () {
+    this.provinceOptions = cities
     this.getOneByUserId()
     this.getJobTypes()
   },
   methods: {
+    citySelect (value) {
+      for (let i = 0; i < this.provinceOptions.length; i++) {
+        if (this.provinceOptions[i].value === value) {
+          this.cityOptions = this.provinceOptions[i].children
+        }
+      }
+    },
     getOneByUserId () {
       getByUserId(this.userId).then(res => {
         this.company = res.data.company
@@ -263,7 +294,7 @@ export default {
   }
   .job-list {
     margin-top: 20px;
-    width: 1024px;
+    width: 968px;
     position: absolute;
     left: 50%;
     margin-left: -480px;

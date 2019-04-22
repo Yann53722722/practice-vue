@@ -33,3 +33,10 @@ export function addUser (username, password, userType) {
     data: data
   })
 }
+export function getUserList (query) {
+  return request({
+    url: '/user/user/getList',
+    method: 'get',
+    params: query
+  })
+}

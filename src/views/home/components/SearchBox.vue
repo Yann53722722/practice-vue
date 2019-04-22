@@ -1,10 +1,14 @@
 <template>
   <div class="search-box">
     <el-input v-model="input" placeholder="请输入内容" class="search-input">
-      <el-select v-model="query.city" slot="prepend" class="search-select">
-        <el-option label="成都" value="成都"></el-option>
-        <el-option label="北京" value="北京"></el-option>
-        <el-option label="上海" value="上海"></el-option>
+      <el-select filterable v-model="query.city" slot="prepend" class="search-select">
+        <el-option
+          v-for="item in cityOptions"
+          :key="item"
+          :label="item"
+          :value="item"
+        >
+        </el-option>
       </el-select>
       <el-select v-model="select" slot="prepend" class="search-select">
         <el-option
@@ -25,6 +29,7 @@
 
 <script>
 import {getList} from '../../../api/job'
+import cities from '../../../utils/cities'
 
 export default {
   name: 'SearchBox',
@@ -33,16 +38,13 @@ export default {
   },
   data () {
     return {
+      cityOptions: [],
       select: 1,
       input: null,
       selectOptions: [
         {
           value: 1,
           label: '搜岗位'
-        },
-        {
-          value: 2,
-          label: '搜公司'
         }
       ],
       companyName: null,
@@ -63,6 +65,12 @@ export default {
     if (this.jobQuery !== null && this.jobQuery !== undefined) {
       this.query = this.jobQuery
     }
+    for (let i = 0; i < cities.length; i++) {
+      let province = cities[i]
+      for (let j = 0; j < province.children.length; j++) {
+        this.cityOptions.push(province.children[j].value)
+      }
+    }
   },
   methods: {
     search () {
@@ -76,11 +84,8 @@ export default {
           })
         } else {
           this.companyName = this.input
-          console.log(this.$route.name)
-          console.log(this.companyName)
         }
       } else if (this.$route.name === 'index') {
-        console.log(this.query.title)
         this.$router.push({
           name: 'jobs',
           params: {

@@ -45,3 +45,10 @@ export function checkJob (id) {
     method: 'patch'
   })
 }
+export function adminGetList (query) {
+  return request({
+    url: '/company/job/getList',
+    method: 'get',
+    params: query
+  })
+}

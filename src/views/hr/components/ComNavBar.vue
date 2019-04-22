@@ -28,7 +28,7 @@
     </div>
     <div class="user" v-else>
       {{ username }}
-      <el-button @click="logout" size="mini">退出登陆</el-button>
+      <el-button type="danger" @click="logout" size="mini">退出登陆</el-button>
     </div>
   </div>
 </template>
@@ -63,7 +63,7 @@ export default {
   .com-nav-bar {
     height: 50px;
     position: absolute;
-    width: 1024px;
+    width: 968px;
     left: 50%;
     margin-left: -480px;
   }
@@ -80,5 +80,9 @@ export default {
   .switch {
     margin-left: 220px;
     padding-top: 12px;
+  }
+  .user {
+    float: right;
+    margin-top: 15px;
   }
 </style>

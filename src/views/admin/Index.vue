@@ -12,28 +12,56 @@
         >
           首页
         </el-menu-item>
-        <el-menu-item
-          index="/admin/check-company"
-        >
-          公司审核
-        </el-menu-item>
-        <el-menu-item
-          index="/admin/check-job"
-        >
-          岗位审核
-        </el-menu-item>
+        <el-submenu index="1">
+          <template slot="title">
+            公司管理
+          </template>
+          <el-menu-item
+            index="/admin/check-company"
+          >
+            公司审核
+          </el-menu-item>
+          <el-menu-item
+            index="/admin/company-list"
+          >
+            公司列表
+          </el-menu-item>
+        </el-submenu>
+        <el-submenu index="2">
+          <template slot="title">
+            岗位管理
+          </template>
+          <el-menu-item
+            index="/admin/check-job"
+          >
+            岗位审核
+          </el-menu-item>
+          <el-menu-item
+            index="/admin/job-list"
+          >
+            岗位列表
+          </el-menu-item>
+        </el-submenu>
         <el-submenu
-          index="1"
+          index="3"
         >
           <template slot="title">用户管理</template>
           <el-menu-item
             index="/admin/user-list"
           >用户列表</el-menu-item>
         </el-submenu>
+        <el-submenu
+          index="4"
+        >
+          <template slot="title">权限管理</template>
+          <el-menu-item
+          >角色管理</el-menu-item>
+          <el-menu-item
+          >授权管理</el-menu-item>
+        </el-submenu>
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header>Header</el-header>
       <el-main>
         <router-view/>
       </el-main>
@@ -79,5 +107,8 @@ export default {
 
   body > .el-container {
     margin-bottom: 60px;
+  }
+  .el-breadcrumb {
+    align-self: center;
   }
 </style>

@@ -41,7 +41,7 @@
               v-for="jobType in jobTypes"
               :key="jobType.id"
             >
-              <div class="job-type-name">{{ jobType.name }}</div>
+              <div @click="selectIndustry(jobType.id)" class="job-type-name">{{ jobType.name }}</div>
             </div>
           </div>
         </el-col>
@@ -88,6 +88,14 @@ export default {
     },
     handleChildChange (val) {
       this.jobTypes = val.jobTypes
+    },
+    selectIndustry (val) {
+      this.$router.push({
+        name: 'jobs',
+        params: {
+          jobTypeId: val
+        }
+      })
     }
   }
 }

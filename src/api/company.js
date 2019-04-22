@@ -32,3 +32,17 @@ export function checkCompany (id) {
     method: 'patch'
   })
 }
+export function addCompany (company) {
+  return request({
+    url: '/company/',
+    method: 'post',
+    data: company
+  })
+}
+export function queryForList (query) {
+  return request({
+    url: '/company/queryForList',
+    method: 'get',
+    params: query
+  })
+}

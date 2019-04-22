@@ -139,6 +139,7 @@ export default {
       jobQuery: {
         educationRank: null,
         minSalary: null,
+        jobTypeId: null,
         maxSalary: null,
         workDay: null,
         workTime: null,
@@ -334,6 +335,7 @@ export default {
         this.jobList = res.data.content
         this.height = res.data.content.length * 100
         this.total = res.data.totalElements
+        this.jobQuery.jobTypeId = null
       })
     },
     currentChange (val) {
@@ -341,7 +343,6 @@ export default {
       this.getJobList()
     },
     searchBoxData (res) {
-      console.log(res)
       this.jobList = res.data.content
       this.height = res.data.content.length * 100
       this.total = res.data.totalElements
@@ -354,7 +355,9 @@ export default {
     if (this.$route.params.city !== undefined) {
       this.jobQuery.city = this.$route.params.city
     }
-    console.log(this.$route.params.title)
+    if (this.$route.params.jobTypeId !== undefined) {
+      this.jobQuery.jobTypeId = this.$route.params.jobTypeId
+    }
     this.getJobList()
   }
 }

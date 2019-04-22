@@ -4,7 +4,7 @@
       <com-nav-bar></com-nav-bar>
     </div>
     <div class="body" >
-      <div class="company-box">
+      <div v-if="company.id !== null" class="company-box">
         <div class="company-header">
           <div style="margin: 15px 0;font-size: 40px">
             {{ company.name }}
@@ -64,6 +64,10 @@
           </el-tabs>
         </div>
       </div>
+      <div class="company-box" v-else style="text-align: left">
+        <span style="font-size: 50px">还未添加任何公司信息！</span>
+        <el-button type="primary" @click="handleAddCompanyOpen">完善公司信息</el-button>
+      </div>
     </div>
     <el-dialog
       :visible="companyInfoDialogVisible"
@@ -99,13 +103,28 @@
           <el-input type="textarea" :rows="5" v-model="formData.description"/>
         </el-form-item>
         <el-form-item label="所在城市">
-          <el-input v-model="formData.city"/>
+          <el-select v-model="province" @change="citySelect" placeholder="请选择">
+            <el-option
+              v-for="item in provinceOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+          <el-select v-model="formData.city" placeholder="请选择">
+            <el-option
+              v-for="item in cityOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="公司地址">
           <el-input v-model="formData.address"/>
         </el-form-item>
         <el-form-item style="text-align: right">
-          <el-button type="primary" @click="updateCompany">保存</el-button>
+          <el-button type="primary" @click="editOrAdd === 'edit'?updateCompany():addCompany()">保存</el-button>
           <el-button @click="handleClose">取消</el-button>
         </el-form-item>
       </el-form>
@@ -115,13 +134,18 @@
 
 <script>
 import ComNavBar from './components/ComNavBar'
-import {getByUserId, updateOne} from '../../api/company'
+import {addCompany, getByUserId, updateOne} from '../../api/company'
 import {getAll} from '../../api/industry'
+import cities from '../../utils/cities'
 export default {
   name: 'Index',
   components: {ComNavBar},
   data () {
     return {
+      editOrAdd: 'add',
+      province: null,
+      provinceOptions: null,
+      cityOptions: null,
       props: {
         label: 'industry.name',
         value: 'id',
@@ -158,7 +182,8 @@ export default {
         scale: null,
         industryId: null,
         image: null,
-        city: null
+        city: null,
+        userId: null
       },
       jobs: [],
       industry: {
@@ -172,18 +197,42 @@ export default {
     }
   },
   created () {
+    this.provinceOptions = cities
     this.getOneByUserId()
     this.getIndustryList()
   },
   methods: {
+    addCompany () {
+      console.log('新增公司')
+      addCompany(this.formData).then(() => {
+        this.getOneByUserId()
+        this.companyInfoDialogVisible = false
+      })
+    },
+    handleAddCompanyOpen () {
+      this.editOrAdd = 'add'
+      this.resetForm()
+      this.formData.userId = this.userId
+      this.companyInfoDialogVisible = true
+    },
+    citySelect (value) {
+      for (let i = 0; i < this.provinceOptions.length; i++) {
+        if (this.provinceOptions[i].value === value) {
+          this.cityOptions = this.provinceOptions[i].children
+        }
+      }
+    },
     getOneByUserId () {
       getByUserId(this.userId).then(res => {
-        this.company = res.data.company
-        this.jobs = res.data.jobs
-        this.industry = res.data.industry
+        if (res.code !== 300) {
+          this.company = res.data.company
+          this.jobs = res.data.jobs
+          this.industry = res.data.industry
+        }
       })
     },
     handleEditCompanyOpen () {
+      this.editOrAdd = 'edit'
       this.resetForm()
       this.companyInfoDialogVisible = true
       let key
@@ -250,13 +299,14 @@ export default {
 
 <style scoped>
   .hr {
-    min-width: 1024px;
-    width: 100%;
+    width: 968px;
     text-align: center;
     position: absolute;
+    left: 50%;
+    margin-left: -480px;
   }
   .company-box {
-    width: 1024px;
+    width: 968px;
     left: 50%;
     position: absolute;
     margin-left: -480px;
@@ -270,5 +320,8 @@ export default {
   }
   .header {
     height: 50px;
+  }
+  .body {
+    margin-top: 20px;
   }
 </style>
